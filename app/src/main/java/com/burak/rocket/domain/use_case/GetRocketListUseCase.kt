@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.catch
 class GetRocketListUseCase(
     private val rocketRepository: RocketRepository,
     private val rocketDataRepository: RocketDataRepository
-
 ) {
 
     suspend operator fun invoke(onResult: suspend (ResultState<List<RocketInfo>>) -> Unit) {
@@ -29,12 +28,12 @@ class GetRocketListUseCase(
         return response.map { rocketsDtoItem ->
             with(rocketsDtoItem) {
                 RocketInfo(
-                    id =  id?: "1",
-                    name = name ?: "",
+                    id = id ?: "1",
+                    name = name.orEmpty(),
                     isFavorite = false,
-                    image = links?.patch?.small ?: "",
-                    sliderListUrl = links?.flickr?.original?.filterNotNull() ?: emptyList(),
-                    description = details ?: ""
+                    image = links?.patch?.small.orEmpty(),
+                    sliderListUrl = links?.flickr?.original.orEmpty().filterNotNull(),
+                    description = details.orEmpty()
                 )
             }
         }

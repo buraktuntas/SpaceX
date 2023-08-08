@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,15 +38,12 @@ fun RocketListItem(
     onItemClick: (RocketInfo) -> Unit,
     onFavoriteClick: () -> Unit
 ) {
-
     Card(
         colors = CardDefaults.cardColors(
-            containerColor =
-            MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp))
             .clickable { onItemClick(item) }
             .padding(8.dp)
     ) {
@@ -64,43 +62,35 @@ fun RocketListItem(
                     .build(),
                 contentDescription = "Test",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.clip(CircleShape).padding(8.dp)
+                modifier = Modifier
+                    .size(64.dp)
+                    .clip(CircleShape)
             )
             Column(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
                     .weight(1.0f)
+                    .padding(start = 8.dp)
             ) {
                 Text(
                     text = item.name.toString(),
-                    modifier = Modifier
-                        .clip(CircleShape),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
                     text = item.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
-
-
-            Box(
+            Icon(
+                imageVector = if (item.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "Favorite Icon",
                 modifier = Modifier
                     .clickable { onFavoriteClick() }
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
-            ) {
-                Icon(
-                    if (item.isFavorite)
-                        Icons.Filled.Favorite
-                    else
-                        Icons.Filled.FavoriteBorder, ""
-                )
-            }
-
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            )
         }
     }
 }
