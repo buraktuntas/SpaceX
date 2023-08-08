@@ -1,6 +1,5 @@
 package com.burak.rocket.presentation.screens.rocket_detail.components
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -26,88 +25,57 @@ import kotlinx.coroutines.delay
 @ExperimentalPagerApi
 @Composable
 fun ImageSlider(
-  imageList: List<String?>,
+    imageList: List<String?>,
 ) {
-  val pagerState = rememberPagerState(imageList.size)
+    val pagerState = rememberPagerState(imageList.size)
 
-  LaunchedEffect(key1 = pagerState.currentPage) {
-    delay(3000)
-    var newPosition = pagerState.currentPage + 1
-    if (newPosition > imageList.size - 1) {
-      newPosition = 0
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        delay(3000)
+        var newPosition = pagerState.currentPage + 1
+        if (newPosition > imageList.size - 1) {
+            newPosition = 0
+        }
+        pagerState.animateScrollToPage(newPosition)
     }
-    pagerState.animateScrollToPage(newPosition)
-  }
 
-  Column(
-    modifier = Modifier
-      .fillMaxWidth(),
-    verticalArrangement = Arrangement.Top,
-    horizontalAlignment = Alignment.CenterHorizontally
-  ) {
-
-    HorizontalPager(
-      modifier = Modifier
-        .fillMaxWidth()
-        .height(130.dp)
-        .background(
-          color = Color.White,
-          shape = MaterialTheme.shapes.small
-        ),
-      state = pagerState,
-      verticalAlignment = Alignment.Top,
-    ) {
-      AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-          .data(imageList)
-          .crossfade(true)
-          .build(),
-        contentDescription = "Test",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.clip(CircleShape)
-      )
-
-    LazyRow(
-      modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentHeight(),
-      horizontalArrangement = Arrangement.Center
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-      items(imageList.size) { index ->
-        if (index == pagerState.currentPage) {
-          Box(
+        HorizontalPager(
             modifier = Modifier
-              .size(4.dp)
-              .clip(CircleShape)
-              .background(color = MaterialTheme.colors.onBackground)
-          )
-        } else {
-          Box(
-            modifier = Modifier
-              .size(4.dp)
-              .clip(CircleShape)
-              .background(color = Color.Gray)
-          )
+                .fillMaxWidth()
+                .height(130.dp)
+                .background(
+                    color = Color.White,
+                    shape = MaterialTheme.shapes.small
+                ),
+            state = pagerState,
+            verticalAlignment = Alignment.Top,
+        ) { page ->
+            val currentImage = imageList[page]
+            if (currentImage != null) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(currentImage)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "Test",
+                    contentScale = ContentScale.Crop
+                )
+            }
         }
-
-        if (index != imageList.size - 1) {
-          Spacer(
-            modifier = Modifier
-              .padding(2.dp)
-          )
-        }
-      }
     }
-    }
-}
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Preview(showBackground = true)
 @Composable
 fun PreviewBannerSlider() {
-  ImageSlider(
-    imageList = arrayListOf()
-  )
+    ImageSlider(
+        imageList = arrayListOf()
+    )
 }
