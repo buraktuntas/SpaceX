@@ -2,14 +2,12 @@ package com.burak.rocket.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -34,33 +32,25 @@ import com.burak.rocket.data.local.entity.RocketInfo
 
 @Composable
 fun RocketListItem(
-    item: RocketInfo,
-    onItemClick: (RocketInfo) -> Unit,
-    onFavoriteClick: () -> Unit
+    item: RocketInfo, onItemClick: (RocketInfo) -> Unit, onFavoriteClick: () -> Unit
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        ),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClick(item) }
-            .padding(8.dp)
-    ) {
+    val commonPadding = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+
+    Card(colors = CardDefaults.cardColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer
+    ), modifier = Modifier
+        .fillMaxWidth()
+        .clickable { onItemClick(item) }
+        .padding(8.dp)) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemClick(item) }
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+            modifier = commonPadding,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(item.image)
-                    .crossfade(true)
+                model = ImageRequest.Builder(LocalContext.current).data(item.image).crossfade(true)
                     .build(),
-                contentDescription = "Test",
+                contentDescription = "Rocket Image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
@@ -84,13 +74,13 @@ fun RocketListItem(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-            Icon(
-                imageVector = if (item.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+            Icon(imageVector = if (item.isFavorite)
+                Icons.Filled.Favorite
+            else Icons.Filled.FavoriteBorder,
                 contentDescription = "Favorite Icon",
                 modifier = Modifier
                     .clickable { onFavoriteClick() }
-                    .padding(horizontal = 12.dp, vertical = 8.dp)
-            )
+                    .then(commonPadding))
         }
     }
 }

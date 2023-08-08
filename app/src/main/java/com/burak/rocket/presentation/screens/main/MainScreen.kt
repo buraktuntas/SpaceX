@@ -26,11 +26,8 @@ import com.burak.rocket.presentation.screens.favorite.FavoriteListViewModel
 import com.burak.rocket.presentation.screens.rocket.RocketListScreen
 import com.burak.rocket.presentation.screens.rocket.RocketListViewModel
 import com.burak.rocket.presentation.screens.rocket_detail.RocketDetailScreen
-import com.burak.rocket.util.UiEvent
 import com.burak.rocket.util.handleUiEvent
 import com.google.accompanist.pager.ExperimentalPagerApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import com.burak.rocket.domain.model.TabItem

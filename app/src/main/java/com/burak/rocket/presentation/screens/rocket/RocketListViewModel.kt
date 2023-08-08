@@ -69,10 +69,12 @@ class RocketListViewModel @Inject constructor(
 
     private fun callGetRocketList() {
         viewModelScope.launch(ExceptionHandler.handler) {
+            updatePageLoading(true)
             getRocketListUseCase(
                 onResult = {
                     when (it) {
                         is ResultState.Success -> {
+                            updatePageLoading(false)
                             it.data.let { dataList ->
                                 rocketDataRepository.allList().collect { list ->
                                     if (list.isNotEmpty()) {
@@ -87,6 +89,8 @@ class RocketListViewModel @Inject constructor(
 
                         is ResultState.Error -> {
                             _uiEvent.send(UiEvent.ShowError(it.exception))
+                            updatePageLoading(false)
+
                         }
 
                         else -> {}
@@ -111,6 +115,16 @@ class RocketListViewModel @Inject constructor(
             withContext(Dispatchers.IO) {
                 val updatedItem = item.copy(isFavorite = !item.isFavorite)
                 rocketDataRepository.updateRocket(updatedItem)
+            }
+        }
+    }
+
+    private fun updatePageLoading(isLoading: Boolean) {
+        viewModelScope.launch(ExceptionHandler.handler) {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isPageLoading  = isLoading
+                )
             }
         }
     }
